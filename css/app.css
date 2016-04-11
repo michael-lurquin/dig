@@ -1,0 +1,53 @@
+@charset "UTF-8";
+
+/* Google fonts local */
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/Lato.woff2) format('woff2');
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 80px;
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 60px;
+}
+
+label { font-weight: 400 }
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #f5f5f5;
+}
+footer .text-muted { margin-top: 16px }
+
+.form-group.required .control-label:after {
+    content: " *";
+    font-size: 16px;
+    color: rgb(169, 68, 66);
+}
+
+:focus { outline: none !important }
+
+.page-header {
+    margin-top: -10px;
+    padding: 0;
+}
+.page-header .btn { margin-top: 8px }
+
+.table > tbody > tr > td { vertical-align: middle }
+.table > tbody > tr > td { height: 50px }
+
+.table_permissions th:nth-child(n+2) { text-align: center }
+.table_permissions tr td:nth-child(n+2) { vertical-align: middle }
+/*.table th:nth-child(n+2):not(:last-child) { text-align: center }
+.table td:nth-child(n+2):not(:last-child) { text-align: center }*/
