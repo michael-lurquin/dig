@@ -11,6 +11,7 @@
             <thead>
                 <tr>
                     <th>Action</th>
+                    <th>Nom</th>
                     <th>Champ</th>
                     <th>Ancienne valeur</th>
                     <th>Nouvelle valeur</th>
@@ -27,6 +28,7 @@
                             <td>-</td>
                             <td>-</td>
                             <td>-</td>
+                            <td>-</td>
                             <td>{{ $service->user_id }}</td>
                             <td>{{ $service->created_at->format('d/m/Y H:i:s') }}</td>
                             <td></td>
@@ -34,9 +36,10 @@
                     @else
                         <tr class="{{ $revision->valid ? 'success' : '' }}">
                             <td>{{ $revision->field == 'deleted_at' ? 'Suppression' : 'Modification' }}</td>
+                            <td>{{ $revision->name }}</td>
                             <td>{{ $revision->getField() }}</td>
-                            <td>{{ $revision->old_value }}</td>
-                            <td>{{ $revision->new_value }}</td>
+                            <td>{{ !is_null($revision->old_value) ? $revision->old_value : '-' }}</td>
+                            <td>{{ !is_null($revision->new_value) ? $revision->new_value : '-' }}</td>
                             <td>{{ $revision->user_id }}</td>
                             <td>{{ $revision->created_at->format('d/m/Y H:i:s') }}</td>
                             <td>

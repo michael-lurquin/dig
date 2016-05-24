@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 use App\Permission;
+use DB;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -41,6 +42,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected function getPermissions()
     {
-        return Permission::with('roles')->get();
+        $check = DB::select('SELECT COUNT(*) as `exists` FROM information_schema.tables WHERE table_name = "permissions" AND table_schema = database()')[0];
+
+        if ( $check->exists === '1' )
+        {
+            return Permission::with('roles')->get();
+        }
+
+        return [];
     }
 }

@@ -22,6 +22,7 @@ class UsersTableSeeder extends Seeder
         ]);
         $user->assign('admin', $user);
         $user->services()->create([
+            'identifier' => 1,
             'title' => 'Mon premier service',
             'slug' => 'mon-premier-service',
         ]);

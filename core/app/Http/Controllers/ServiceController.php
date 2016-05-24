@@ -6,9 +6,19 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\ServiceRequest;
 use App\Service;
+use App\Behaviour\ListAvailability;
+use App\Behaviour\ListCategories;
 
 class ServiceController extends Controller
 {
+    use ListAvailability;
+    use ListCategories;
+
+    private $dontKeepRevision = [
+        'identifier',
+        'slug',
+    ];
+
     public function __construct()
     {
         $this->middleware('permission:service_delete', ['only' => 'destroy']);
@@ -36,30 +46,87 @@ class ServiceController extends Controller
 
     public function create()
     {
-        return view('services.create');
+        $availability = $this->getListAvailability();
+        $categories = $this->getListCategories();
+
+        return view('services.create')->withAvailability($availability)->withCategories($categories);
     }
 
     public function store(ServiceRequest $request)
     {
-        $request->user()->services()->create([
+        $service = $request->user()->services()->create([
+            'identifier' => $request->identifier,
             'title' => $request->title,
             'slug' => $request->slug,
+            'availability_id' => $request->availability_id,
+            'description_categorie' => $request->description_categorie,
+            'contexte' => $request->contexte,
+            'description' => $request->description,
+            'exclus_perimetre' => $request->exclus_perimetre,
+            'prerequis' => $request->prerequis,
+            'contact_general' => $request->contact_general,
         ]);
+
+        if ( $request->has('category_id') )
+        {
+            $service->categories()->sync($request->category_id);
+        }
 
         return redirect()->route('service.index')->withSuccess("Le service : <strong>$request->title</strong> a été créé avec succès");
     }
 
     public function edit(Service $service)
     {
-        return view('services.edit')->withService($service);
+        $availability = $this->getListAvailability();
+        $categories = $this->getListCategories();
+
+        $service->categories_used = $service->categories->lists('id')->toArray();
+
+        return view('services.edit')->withService($service)->withAvailability($availability)->withCategories($categories);
+    }
+
+    private function arrayRecursiveDiff($aArray1 = [], $aArray2 = [])
+    {
+        $aReturn = [];
+
+        foreach ($aArray1 as $mKey => $mValue)
+        {
+            if ( array_key_exists($mKey, $aArray2) )
+            {
+                if ( is_array($mValue) )
+                {
+                    $aRecursiveDiff = $this->arrayRecursiveDiff($mValue, $aArray2[$mKey]);
+
+                    if ( count($aRecursiveDiff) )
+                    {
+                        $aReturn[$mKey] = $aRecursiveDiff;
+                    }
+                }
+                else
+                {
+                    if ( $mValue != $aArray2[$mKey] )
+                    {
+                        $aReturn[$mKey] = $mValue;
+                    }
+                }
+            }
+            else
+            {
+                $aReturn[$mKey] = $mValue;
+            }
+        }
+
+        return $aReturn;
     }
 
     public function update(ServiceRequest $request, Service $service)
     {
-        // Pas de modifications réel sans validation
+        // Pas de modifications réel sans validation (depuis l'écran de révision)
         $fillable = $service['fillable'];
+        $fillable[] = 'category_id';
 
         $original = $service->toArray();
+        $original['category_id'] = $service->categories->lists('id')->toArray();
         $originalData = [];
 
         foreach($fillable as $field)
@@ -70,18 +137,66 @@ class ServiceController extends Controller
             }
         }
 
+        if ( $request->has('category_id') )
+        {
+            foreach ($originalData['category_id'] as $id => $value)
+            {
+                $originalData['category_id'][$id] = (string) $value;
+            }
+        }
+
         $updatedData = $request->only($fillable);
 
-        $diff = array_diff($updatedData, $originalData);
+        var_dump($updatedData);
+        var_dump($originalData);
+        $diff = $this->arrayRecursiveDiff($updatedData, $originalData);
+        // dd($diff);
+        $diff = empty($diff) ? $this->arrayRecursiveDiff($originalData, $updatedData) : $diff;
 
         foreach ($diff as $field => $value)
         {
-            $service->revisions()->create([
-                'user_id' => $request->user()->id,
-                'field' => $field,
-                'old_value' => $originalData[$field],
-                'new_value' => $updatedData[$field],
-            ]);
+            if ( !in_array($field, $this->dontKeepRevision) ) {
+
+                if ( is_array($value) )
+                {
+                    foreach ($value as $id => $sub_value)
+                    {
+                        if ( isset($originalData[$field][$id]) && isset($updatedData[$field][$id]) )
+                        {
+                            if ( $originalData[$field][$id] != $updatedData[$field][$id] )
+                            {
+                                $service->revisions()->create([
+                                    'name' => $request->get('name'),
+                                    'user_id' => $request->user()->id,
+                                    'field' => $field,
+                                    'old_value' => $originalData[$field][$id],
+                                    'new_value' => $updatedData[$field][$id],
+                                ]);
+                            }
+                        }
+                        else
+                        {
+                            $service->revisions()->create([
+                                'name' => $request->get('name'),
+                                'user_id' => $request->user()->id,
+                                'field' => $field,
+                                'old_value' => isset($originalData[$field][$id]) ? $originalData[$field][$id] : NULL,
+                                'new_value' => isset($updatedData[$field][$id]) ? $updatedData[$field][$id] : NULL,
+                            ]);
+                        }
+                    }
+                }
+                else
+                {
+                    $service->revisions()->create([
+                        'name' => $request->get('name'),
+                        'user_id' => $request->user()->id,
+                        'field' => $field,
+                        'old_value' => isset($originalData[$field]) ? $originalData[$field] : NULL,
+                        'new_value' => isset($updatedData[$field]) ? $updatedData[$field] : NULL,
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été modifié avec succès");
@@ -95,14 +210,14 @@ class ServiceController extends Controller
 
         return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été supprimé avec succès");
     }
-    
+
     public function restore(Request $request, $slug)
     {
     		$service = Service::withTrashed()->whereSlug($slug)->first();
     		$service->user_id = $request->user()->id;
     		$service->deleted_at = NULL;
     		$service->save();
-    		
+
     		return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été restauré avec succès");
     }
 }

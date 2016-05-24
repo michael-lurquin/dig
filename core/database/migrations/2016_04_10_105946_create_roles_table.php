@@ -19,7 +19,7 @@ class CreateRolesTable extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('role_id')->after('password')->default(1)->unsigned()->index();
+            $table->integer('role_id')->after('password')->default(1)->index();
         });
     }
 

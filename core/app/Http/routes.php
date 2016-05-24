@@ -35,5 +35,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('permission', ['uses' => 'PermissionController@index', 'as' => 'permission.index']);
     Route::post('permission', ['uses' => 'PermissionController@update', 'as' => 'permission.update']);
 
-
 });

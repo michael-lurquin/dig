@@ -25,7 +25,7 @@
                         <td>
                             <a href="{{ route('service.show', $service->slug) }}">{{ $service->title }}</a>
                         </td>
-                        <td>{{ $service->identifier }}</td>
+                        <td>DIG-CATEG-{{ $service->identifier }}</td>
                         <td>{{ $service->updated_at }}</td>
                         <td>{{ $service->user->name }}</td>
                         <td>

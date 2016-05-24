@@ -14,6 +14,7 @@ class CreateRevisionsTable extends Migration
     {
         Schema::create('revisions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->integer('service_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('field');

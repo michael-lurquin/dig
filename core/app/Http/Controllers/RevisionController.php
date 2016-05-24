@@ -39,7 +39,26 @@ class RevisionController extends Controller
         $revision->save();
 
         $service = Service::whereSlug($slug)->first();
-        $service->{$revision->field} = $revision->new_value;
+
+        if ( $revision->field == 'category_id' )
+        {
+            // Ajout
+            if ( empty($revision->old_value) && !empty($revision->new_value) )
+            {
+                $service->categories()->attach([$revision->new_value]);
+            }
+            // Suppression
+            elseif ( !empty($revision->old_value) && empty($revision->new_value) )
+            {
+                $service->categories()->detach([$revision->old_value]);
+            }
+        }
+        else
+        {
+            $service = Service::whereSlug($slug)->first();
+            $service->{$revision->field} = $revision->new_value;
+        }
+
         $service->save();
 
         $revisions = Revision::whereServiceId($revision->service_id)->whereField($revision->field)->whereNotIn('id', [$id])->delete();

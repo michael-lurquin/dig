@@ -9,5 +9,7 @@
 
     @include('services.form')
 
+    {{ Form::submit('Enregistrer', ['class' => 'btn btn-primary']) }}
+
 {!! Form::close() !!}
 @endsection

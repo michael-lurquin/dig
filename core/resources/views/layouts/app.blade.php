@@ -14,6 +14,7 @@
 
     <!-- Styles CSS -->
     {{ Html::style('css/bootstrap.min.css') }}
+    {{ Html::style('css/bootstrap-select.min.css') }}
     {{ Html::style('css/app.css') }}
 </head>
 <body>
@@ -36,6 +37,7 @@
     <!-- Scripts JS -->
     {{ Html::script('js/jquery-2.2.2.min.js') }}
     {{ Html::script('js/bootstrap.min.js') }}
+    {{ Html::script('js/bootstrap-select.min.js') }}
     {{ Html::script('js/app.js') }}
 </body>
 </html>

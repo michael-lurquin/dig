@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Revision extends Model
 {
-    protected $fillable = ['service_id', 'user_id', 'field', 'old_value', 'new_value', 'valid'];
+    protected $fillable = ['name', 'service_id', 'user_id', 'field', 'old_value', 'new_value', 'valid'];
 
     public function user()
     {
@@ -19,8 +19,17 @@ class Revision extends Model
     }
 
     private $fieldFormatter = [
+        'identifier' => 'Identifiant',
         'title' => 'Titre',
         'slug' => 'Chemin',
+        'availability_id' => 'Statut',
+        'category_id' => 'Catégorie',
+        'description_categorie' => 'Decription de la catégorie',
+        'contexte' => 'Contexte',
+        'description' => 'Description',
+        'exclus_perimetre' => 'Élements exclus du périmètre',
+        'prerequis' => 'Prérequis',
+        'contact_general' => 'Contact général',
     ];
 
     public function getField()

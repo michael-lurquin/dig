@@ -22,6 +22,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Service::class, function (Faker\Generator $faker) {
     $title = implode(' ', $faker->words(3));
     return [
+        'identifier' => mt_rand(2, 10),
         'title' => ucfirst($title),
         'slug' => str_slug($title),
     ];
