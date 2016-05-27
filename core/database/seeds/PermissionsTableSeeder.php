@@ -20,13 +20,33 @@ class PermissionsTableSeeder extends Seeder
     public function run()
     {
         $this->permissions = [
-            'manage_permission' => [
+            'manage_permissions' => [
                 'label' => 'Gestion des permissions',
                 'description' => 'Permet d\'attribuer des permissions à un ou plusieurs rôles',
+            ],
+            'manage_users' => [
+              'label' => 'Gestion des utilisateurs',
+              'description' => 'Permet d\'ajouter/modifier/supprimer des utilisateurs et de leurs attribuer des rôles',
+            ],
+            'manage_categories' => [
+              'label' => 'Gestion des catégories',
+              'description' => 'Permet d\'ajouter/modifier/supprimer des catégories au service',
+            ],
+            'manage_availabilities' => [
+              'label' => 'Gestion des disponibilitées',
+              'description' => 'Permet d\'ajouter/modifier/supprimer des disponibilités au service',
+            ],
+            'service_create' => [
+              'label' => 'Création d\'un service',
+              'description' => NULL,
             ],
             'service_delete' => [
                 'label' => 'Supprimer un service',
                 'description' => NULL,
+            ],
+            'service_restore' => [
+              'label' => 'Restaurer un service',
+              'description' => NULL,
             ],
             'revision_validate' => [
                 'label' => 'Valider une révision d\'un service',
@@ -38,10 +58,6 @@ class PermissionsTableSeeder extends Seeder
             ],
             'revision_delete' => [
                 'label' => 'Supprimer une révision d\'un service',
-                'description' => NULL,
-            ],
-            'service_restore' => [
-                'label' => 'Restaurer un service',
                 'description' => NULL,
             ],
         ];
@@ -58,14 +74,21 @@ class PermissionsTableSeeder extends Seeder
         // Admin => TOUTES LES PERMISSIONS
         $this->fillPermissions($this->permissions, 'admin');
 
-        // Tous les rôles : manage_profile
+        // Modérateur => Liste des permissions
         $permissions_allowed = [
+            'service_create',
             'service_delete',
             'revision_validate',
             'revision_restore',
             'revision_delete',
         ];
         $this->fillPermissions($permissions_allowed, 'modérateur');
+
+        // Écrivain => Liste des permissions
+        $permissions_allowed = [
+            'service_create',
+        ];
+        $this->fillPermissions($permissions_allowed, 'ecrivain');
     }
 
     /**

@@ -24,4 +24,9 @@ class Category extends Model
     {
         return $this->belongsToMany(Service::class);
     }
+
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
 }

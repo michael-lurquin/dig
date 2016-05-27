@@ -53,6 +53,32 @@ class RevisionController extends Controller
                 $service->categories()->detach([$revision->old_value]);
             }
         }
+        elseif ( $revision->field == 'agent_responsable_suppleant' )
+        {
+            // Ajout
+            if ( empty($revision->old_value) && !empty($revision->new_value) )
+            {
+                $service->ars()->attach([$revision->new_value]);
+            }
+            // Suppression
+            elseif ( !empty($revision->old_value) && empty($revision->new_value) )
+            {
+                $service->ars()->detach([$revision->old_value]);
+            }
+        }
+        elseif ( $revision->field == 'autres_agents' )
+        {
+            // Ajout
+            if ( empty($revision->old_value) && !empty($revision->new_value) )
+            {
+                $service->aai()->attach([$revision->new_value]);
+            }
+            // Suppression
+            elseif ( !empty($revision->old_value) && empty($revision->new_value) )
+            {
+                $service->aai()->detach([$revision->old_value]);
+            }
+        }
         else
         {
             $service = Service::whereSlug($slug)->first();
@@ -92,6 +118,6 @@ class RevisionController extends Controller
 
         $revision->delete();
 
-        return redirect()->route('service.revisions', $service->slug)->withSuccess("La révision de <strong>$author</strong> a été supprimée avec succès");
+        return redirect()->route('service.revisions', $service->slug)->withSuccess("La révision <strong>$revision->name</strong> a été supprimée avec succès");
     }
 }

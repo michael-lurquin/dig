@@ -17,7 +17,7 @@
                     <th>Nouvelle valeur</th>
                     <th>Auteur</th>
                     <th>Date de l'opération</th>
-                    <th width="147">Actions</th>
+                    <th width="165">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,8 +38,8 @@
                             <td>{{ $revision->field == 'deleted_at' ? 'Suppression' : 'Modification' }}</td>
                             <td>{{ $revision->name }}</td>
                             <td>{{ $revision->getField() }}</td>
-                            <td>{{ !is_null($revision->old_value) ? $revision->old_value : '-' }}</td>
-                            <td>{{ !is_null($revision->new_value) ? $revision->new_value : '-' }}</td>
+                            <td>{{ !is_null($revision->old_value) ? $revision->getValue($revision->old_value) : '-' }}</td>
+                            <td>{{ !is_null($revision->new_value) ? $revision->getValue($revision->new_value) : '-' }}</td>
                             <td>{{ $revision->user_id }}</td>
                             <td>{{ $revision->created_at->format('d/m/Y H:i:s') }}</td>
                             <td>
@@ -58,6 +58,11 @@
                                     @if (Auth::user()->can('revision_restore'))
                                         <a href="{{ action('RevisionController@restore', ['service' => $service->slug, 'id' => $revision->id]) }}" class="btn btn-warning">
                                             <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Restaurer
+                                        </a>
+                                    @endif
+                                    @if (Auth::user()->can('revision_delete'))
+                                        <a href="#" data-toggle="modal" data-target="#myModal{{ $revision->id }}" class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                         </a>
                                     @endif
                                 @endif

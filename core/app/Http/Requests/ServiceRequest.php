@@ -35,6 +35,16 @@ class ServiceRequest extends Request
                     'slug' => 'unique:services,slug',
                     'identifier' => 'required|numeric|unique:services,identifier',
                     'availability_id' => 'required|exists:availability,id',
+                    'category_id' => 'required|exists:categories,id',
+                    'agent_responsable' => 'required|exists:users,id',
+                    'agent_responsable_suppleant' => 'required|exists:users,id',
+                    'autres_agents' => 'exists:users,id',
+                    'delai_charge' => 'required|numeric',
+                    'delai_oeuvre' => 'required|numeric',
+                    'delai_tiers' => 'required|numeric',
+                    'marge_securite' => 'required|numeric',
+                    'rh_interne' => 'required',
+                    'cout_externalisation' => 'required|numeric',
                 ];
             }
 
@@ -46,6 +56,16 @@ class ServiceRequest extends Request
                     'slug' => 'unique:services,slug,' . $this->service->id,
                     'identifier' => 'required|numeric|unique:services,identifier,' . $this->service->id,
                     'availability_id' => 'required|exists:availability,id',
+                    'category_id' => 'required|exists:categories,id',
+                    'agent_responsable' => 'required|exists:users,id',
+                    'agent_responsable_suppleant' => 'required|exists:users,id',
+                    'autres_agents' => 'exists:users,id',
+                    'delai_charge' => 'required|numeric',
+                    'delai_oeuvre' => 'required|numeric',
+                    'delai_tiers' => 'required|numeric',
+                    'marge_securite' => 'required|numeric',
+                    'rh_interne' => 'required',
+                    'cout_externalisation' => 'required|numeric',
                 ];
             }
 

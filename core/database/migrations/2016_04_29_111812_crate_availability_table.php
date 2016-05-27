@@ -12,7 +12,7 @@ class CrateAvailabilityTable extends Migration
      */
     public function up()
     {
-      Schema::create('availability', function (Blueprint $table) {
+      Schema::create('availabilities', function (Blueprint $table) {
           $table->increments('id');
           $table->string('name')->unique();
           $table->integer('weight');
@@ -30,6 +30,6 @@ class CrateAvailabilityTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('availability');
+        Schema::dropIfExists('availabilities');
     }
 }

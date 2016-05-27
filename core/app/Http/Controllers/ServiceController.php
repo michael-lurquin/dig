@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests\ServiceRequest;
 use App\Service;
+use App\User;
 use App\Behaviour\ListAvailability;
 use App\Behaviour\ListCategories;
 
@@ -17,6 +18,7 @@ class ServiceController extends Controller
     private $dontKeepRevision = [
         'identifier',
         'slug',
+        'delai_realisation',
     ];
 
     public function __construct()
@@ -48,8 +50,9 @@ class ServiceController extends Controller
     {
         $availability = $this->getListAvailability();
         $categories = $this->getListCategories();
+        $users = User::poste();
 
-        return view('services.create')->withAvailability($availability)->withCategories($categories);
+        return view('services.create')->withAvailability($availability)->withCategories($categories)->withUsers($users);
     }
 
     public function store(ServiceRequest $request)
@@ -65,11 +68,33 @@ class ServiceController extends Controller
             'exclus_perimetre' => $request->exclus_perimetre,
             'prerequis' => $request->prerequis,
             'contact_general' => $request->contact_general,
+            'cout_client' => $request->cout_client,
+            'delai_charge' => $request->delai_charge,
+            'delai_oeuvre' => $request->delai_oeuvre,
+            'delai_tiers' => $request->delai_tiers,
+            'marge_securite' => $request->marge_securite,
+            'remarque_delai' => $request->remarque_delai,
+            'rh_interne' => $request->rh_interne,
+            'cout_externalisation' => $request->cout_externalisation,
+            'agent_responsable' => $request->agent_responsable,
+            'intervenants_externes' => $request->intervenants_externes,
+            'identifiant_procedure' => $request->identifiant_procedure,
+            'resume_procedure' => $request->resume_procedure,
         ]);
 
         if ( $request->has('category_id') )
         {
             $service->categories()->sync($request->category_id);
+        }
+
+        if ( $request->has('agent_responsable_suppleant') )
+        {
+            $service->ars()->sync($request->agent_responsable_suppleant);
+        }
+
+        if ( $request->has('autres_agents') )
+        {
+            $service->aai()->sync($request->autres_agents);
         }
 
         return redirect()->route('service.index')->withSuccess("Le service : <strong>$request->title</strong> a été créé avec succès");
@@ -81,8 +106,12 @@ class ServiceController extends Controller
         $categories = $this->getListCategories();
 
         $service->categories_used = $service->categories->lists('id')->toArray();
+        $service->ars = $service->ars->lists('id')->toArray();
+        $service->aai = $service->aai->lists('id')->toArray();
 
-        return view('services.edit')->withService($service)->withAvailability($availability)->withCategories($categories);
+        $users = User::poste();
+
+        return view('services.edit')->withService($service)->withAvailability($availability)->withCategories($categories)->withUsers($users);
     }
 
     private function arrayRecursiveDiff($aArray1 = [], $aArray2 = [])
@@ -124,9 +153,13 @@ class ServiceController extends Controller
         // Pas de modifications réel sans validation (depuis l'écran de révision)
         $fillable = $service['fillable'];
         $fillable[] = 'category_id';
+        $fillable[] = 'agent_responsable_suppleant';
+        $fillable[] = 'autres_agents';
 
         $original = $service->toArray();
         $original['category_id'] = $service->categories->lists('id')->toArray();
+        $original['agent_responsable_suppleant'] = $service->ars()->lists('id')->toArray();
+        $original['autres_agents'] = $service->aai()->lists('id')->toArray();
         $originalData = [];
 
         foreach($fillable as $field)
@@ -145,12 +178,25 @@ class ServiceController extends Controller
             }
         }
 
+        if ( $request->has('agent_responsable_suppleant') )
+        {
+            foreach ($originalData['agent_responsable_suppleant'] as $id => $value)
+            {
+                $originalData['agent_responsable_suppleant'][$id] = (string) $value;
+            }
+        }
+
+        if ( $request->has('autres_agents') )
+        {
+            foreach ($originalData['autres_agents'] as $id => $value)
+            {
+                $originalData['autres_agents'][$id] = (string) $value;
+            }
+        }
+
         $updatedData = $request->only($fillable);
 
-        var_dump($updatedData);
-        var_dump($originalData);
         $diff = $this->arrayRecursiveDiff($updatedData, $originalData);
-        // dd($diff);
         $diff = empty($diff) ? $this->arrayRecursiveDiff($originalData, $updatedData) : $diff;
 
         foreach ($diff as $field => $value)
@@ -161,7 +207,7 @@ class ServiceController extends Controller
                 {
                     foreach ($value as $id => $sub_value)
                     {
-                        if ( isset($originalData[$field][$id]) && isset($updatedData[$field][$id]) )
+                        if ( !isset($originalData[$field][$id]) && !isset($updatedData[$field][$id]) )
                         {
                             if ( $originalData[$field][$id] != $updatedData[$field][$id] )
                             {
@@ -219,5 +265,10 @@ class ServiceController extends Controller
     		$service->save();
 
     		return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été restauré avec succès");
+    }
+
+    public function export(Request $request, Service $service)
+    {
+
     }
 }

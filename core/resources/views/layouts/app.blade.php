@@ -15,6 +15,10 @@
     <!-- Styles CSS -->
     {{ Html::style('css/bootstrap.min.css') }}
     {{ Html::style('css/bootstrap-select.min.css') }}
+    {{ Html::style('css/font-awesome.min.css') }}
+    @if (Request::is('home'))
+      {{ Html::style('css/sb-admin-2.css') }}
+    @endif
     {{ Html::style('css/app.css') }}
 </head>
 <body>

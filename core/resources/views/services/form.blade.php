@@ -96,8 +96,8 @@
     <div id="collapseDescription" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingDescription">
       <div class="panel-body">
 
-        <div class="block_center form-group{{ $errors->has('categorie') ? ' has-error' : '' }} required">
-          {{ Form::label('categorie', 'Catégorie', ['class' => 'control-label dispo']) }}
+        <div class="block_center form-group{{ $errors->has('category_id') ? ' has-error' : '' }} required">
+          {{ Form::label('category_id', 'Catégorie', ['class' => 'control-label dispo']) }}
 
           <div class="btn-group-vertical" data-toggle="buttons">
             <?php $i = 0; ?>
@@ -116,15 +116,15 @@
             <small class="info">Choisissez une ou plusieurs catégories parmi celles ci-dessus</small>
           </div>
 
-          @if ($errors->has('description'))
+          @if ($errors->has('category_id'))
               <span class="help-block">
-                  <strong>{{ $errors->first('description') }}</strong>
+                  <strong>{{ $errors->first('category_id') }}</strong>
               </span>
           @endif
         </div>
 
         <div class="form-group{{ $errors->has('description_categorie') ? ' has-error' : '' }}">
-          {{ Form::label('description_categorie', 'Description de la catégorie', ['class' => 'control-label']) }}
+          {{ Form::label('description_categorie', 'Description de(s) (la) catégorie(s)', ['class' => 'control-label']) }}
           {{ Form::textarea('description_categorie', old('description_categorie'), ['class' => 'form-control', 'rows' => 5, 'placeholder' => 'Brève description de la catégorie']) }}
 
           @if ($errors->has('description_categorie'))
@@ -300,13 +300,13 @@
           @endif
         </div>
 
-        <div class="form-group{{ $errors->has('delai_realisation_remarque') ? ' has-error' : '' }}">
-          {{ Form::label('delai_realisation_remarque', 'Remarque éventuelle sur le délai de réalisation', ['class' => 'control-label']) }}
-          {{ Form::textarea('delai_realisation_remarque', old('delai_realisation_remarque'), ['class' => 'form-control', 'rows' => 5, 'placeholder' => 'Remarque éventuelle sur le délai de réalisation']) }}
+        <div class="form-group{{ $errors->has('remarque_delai') ? ' has-error' : '' }}">
+          {{ Form::label('remarque_delai', 'Remarque éventuelle sur le délai de réalisation', ['class' => 'control-label']) }}
+          {{ Form::textarea('remarque_delai', old('remarque_delai'), ['class' => 'form-control', 'rows' => 5, 'placeholder' => 'Remarque éventuelle sur le délai de réalisation']) }}
 
-          @if ($errors->has('delai_realisation_remarque'))
+          @if ($errors->has('remarque_delai'))
               <span class="help-block">
-                  <strong>{{ $errors->first('delai_realisation_remarque') }}</strong>
+                  <strong>{{ $errors->first('remarque_delai') }}</strong>
               </span>
           @endif
         </div>
@@ -322,7 +322,7 @@
           @endif
         </div>
 
-        <div class="form-group{{ $errors->has('cout_externalisation') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('cout_externalisation') ? ' has-error' : '' }}">
           {{ Form::label('cout_externalisation', 'Coût d\'externalisation', ['class' => 'control-label']) }}
           <div class="input-group">
             {{ Form::text('cout_externalisation', old('cout_externalisation'), ['class' => 'form-control', 'aria-describedby' => 'cout_externalisation', 'placeholder' => 'Précisez le coût (TVAC), à charge de la DIG, pour la réalisation d\'une occurence du service']) }}
@@ -350,16 +350,14 @@
     <div id="collapseIntervenantsProcedure" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingIntervenantsProcedure">
       <div class="panel-body">
 
-        <div class="form-group{{ $errors->has('agent_responsable') ? ' has-error' : '' }}">
+        <div class="form-group{{ $errors->has('agent_responsable') ? ' has-error' : '' }} required">
           {{ Form::label('agent_responsable', 'Agent DIG responsable', ['class' => 'control-label']) }}
 
             <div class="btn-group bootstrap-select" style="display:block">
-              <select class="form-control selectpicker" data-width="250px">
-                <option data-subtext="Responsable">Personne 1</option>
-                <option data-subtext="Agent">Personne 2</option>
-                <option data-subtext="Responsable">Personne 3</option>
-                <option data-subtext="Secréataire">Personne 4</option>
-                <option data-subtext="Modérateur">Personne 5</option>
+              <select class="form-control selectpicker" data-width="250px" name="agent_responsable">
+                @foreach($users as $user)
+                  <option data-subtext="{{ $user->poste }}" value="{{ $user->id }}" {{ !empty($service) && $user->id == $service->agent_responsable ? 'selected' : NULL }}>{{ $user->name }}</option>
+                @endforeach
               </select>
             </div>
 
@@ -374,12 +372,10 @@
           {{ Form::label('agent_responsable_suppleant', 'Agent DIG responsable suppléant', ['class' => 'control-label']) }}
 
           <div class="btn-group bootstrap-select" style="display:block">
-            <select class="form-control selectpicker" multiple data-width="450px">
-              <option data-subtext="Responsable">Personne 1</option>
-              <option data-subtext="Agent">Personne 2</option>
-              <option data-subtext="Responsable">Personne 3</option>
-              <option data-subtext="Secréataire">Personne 4</option>
-              <option data-subtext="Modérateur">Personne 5</option>
+            <select class="form-control selectpicker" multiple data-width="450px" name="agent_responsable_suppleant[]">
+              @foreach($users as $user)
+                <option data-subtext="{{ $user->poste }}" value="{{ $user->id }}" {{ isset($service) && in_array($user->id, $service->ars) ? 'selected' : NULL }}>{{ $user->name }}</option>
+              @endforeach
             </select>
           </div>
 
@@ -392,16 +388,14 @@
           @endif
         </div>
 
-        <div class="form-group{{ $errors->has('autres_agents') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('autres_agents') ? ' has-error' : '' }}">
           {{ Form::label('autres_agents', 'Autres agents DIG impliqués', ['class' => 'control-label']) }}
 
           <div class="btn-group bootstrap-select" style="display:block">
-            <select class="form-control selectpicker" multiple data-width="450px">
-              <option data-subtext="Responsable">Personne 1</option>
-              <option data-subtext="Agent">Personne 2</option>
-              <option data-subtext="Responsable">Personne 3</option>
-              <option data-subtext="Secréataire">Personne 4</option>
-              <option data-subtext="Modérateur">Personne 5</option>
+            <select class="form-control selectpicker" multiple data-width="450px" name="autres_agents[]">
+              @foreach($users as $user)
+                <option data-subtext="{{ $user->poste }}" value="{{ $user->id }}" {{ isset($service) && in_array($user->id, $service->aai) ? 'selected' : NULL }}>{{ $user->name }}</option>
+              @endforeach
             </select>
           </div>
 
@@ -414,7 +408,7 @@
           @endif
         </div>
 
-        <div class="form-group{{ $errors->has('intervenants_externes') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('intervenants_externes') ? ' has-error' : '' }}">
           {{ Form::label('intervenants_externes', 'Intervenants externes', ['class' => 'control-label']) }}
           {{ Form::textarea('intervenants_externes', old('intervenants_externes'), ['class' => 'form-control', 'rows' => 5, 'placeholder' => 'Citez les intervenants externes à la DIG']) }}
 
@@ -425,7 +419,7 @@
           @endif
         </div>
 
-        <div class="form-group{{ $errors->has('identifiant_procedure') ? ' has-error' : '' }} required">
+        <div class="form-group{{ $errors->has('identifiant_procedure') ? ' has-error' : '' }}">
           {{ Form::label('identifiant_procedure', 'Identifiant procédure', ['class' => 'control-label']) }}
           {{ Form::textarea('identifiant_procedure', old('identifiant_procedure'), ['class' => 'form-control', 'rows' => 5, 'placeholder' => 'Citez l\'identifiant et le chemin d\'accès au document principal qui décrit la procédure/workflow de réalisation du service']) }}
 

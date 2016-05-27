@@ -21,7 +21,7 @@ class PermissionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('permission:manage_permission');
+        $this->middleware('permission:manage_permissions');
     }
 
     public function index()

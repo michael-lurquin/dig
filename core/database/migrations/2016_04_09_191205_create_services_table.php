@@ -18,12 +18,12 @@ class CreateServicesTable extends Migration
             $table->string('slug')->unique();
             $table->string('identifier')->unique();
             $table->integer('user_id')->index();
-            $table->string('description_categorie')->nullable();
-            $table->string('contexte')->nullable();
-            $table->string('description')->nullable();
-            $table->string('exclus_perimetre')->nullable();
-            $table->string('prerequis')->nullable();
-            $table->string('contact_general')->nullable();
+            $table->text('description_categorie')->nullable();
+            $table->text('contexte')->nullable();
+            $table->text('description')->nullable();
+            $table->text('exclus_perimetre')->nullable();
+            $table->text('prerequis')->nullable();
+            $table->text('contact_general')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

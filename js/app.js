@@ -10,6 +10,8 @@ $(function(){
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
+    displayTotal();
+
     function displayTotal() {
       var total = 0;
 

@@ -11,19 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/home', 'HomeController@index');
+Route::get('/', 'HomeController@welcome');
 
 Route::auth();
-
-Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => 'auth'], function () {
 
     // Services
     Route::resource('service', 'ServiceController');
     Route::get('service/{service}/restore', 'ServiceController@restore')->where(['service' => '[a-z-\-0-9]+']);
+    Route::get('service/{service}/export', 'ServiceController@export')->where(['service' => '[a-z-\-0-9]+']);
 
     // Révisions
     Route::get('service/{service}/revisions', ['uses' => 'RevisionController@index', 'as' => 'service.revisions'])->where(['service' => '[a-z-\-0-9]+']);
@@ -35,4 +33,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('permission', ['uses' => 'PermissionController@index', 'as' => 'permission.index']);
     Route::post('permission', ['uses' => 'PermissionController@update', 'as' => 'permission.update']);
 
+    // Utilisateurs
+    Route::resource('user', 'UserController');
+    Route::get('user/{user}/restore', 'UserController@restore');
+
+    // Profil
+    Route::get('profile/{user}', ['uses' => 'UserController@edit', 'as' => 'profile']);
+
+    // Catégories
+    Route::resource('category', 'CategoryController');
+
+    // Disponibilités
+    Route::resource('availability', 'AvailabilityController');
 });
+
+Route::get('service/{service}/show', ['uses' => 'ServiceController@show', 'as' => 'service.show'])->where(['service' => '[a-z-\-0-9]+']);

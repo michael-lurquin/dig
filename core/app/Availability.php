@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Availability extends Model
 {
-    public $table = 'availability';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -25,5 +23,15 @@ class Availability extends Model
     public function services()
     {
         return $this->hasMany(Service::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+    public function getNameAttribute($value)
+    {
+      return ucfirst($value);
     }
 }

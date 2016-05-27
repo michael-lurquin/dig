@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Behaviour\Date;
+// use App\Behaviour\Date;
 use App\Behaviour\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +26,18 @@ class Service extends Model
       'exclus_perimetre',
       'prerequis',
       'contact_general',
+      'cout_client',
+      'delai_charge',
+      'delai_oeuvre',
+      'delai_tiers',
+      'marge_securite',
+      'remarque_delai',
+      'rh_interne',
+      'cout_externalisation',
+      'agent_responsable',
+      'intervenants_externes',
+      'identifiant_procedure',
+      'resume_procedure',
     ];
 
     protected $dates = ['deleted_at'];
@@ -48,6 +60,16 @@ class Service extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function ars()
+    {
+        return $this->belongsToMany(User::class, 'ars_service', 'service_id', 'user_id');
+    }
+
+    public function aai()
+    {
+        return $this->belongsToMany(User::class, 'aai_service', 'service_id', 'user_id');
     }
 
     public function getRouteKeyName()
@@ -84,5 +106,10 @@ class Service extends Model
     private function getUserId()
     {
         return Auth::check() ? Auth::user()->id : NULL;
+    }
+
+    public function getDelaiRealisation()
+    {
+        return $this->delai_charge + $this->delai_oeuvre + $this->delai_tiers + $this->marge_securite;
     }
 }

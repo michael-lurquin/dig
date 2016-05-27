@@ -4,14 +4,18 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Behaviour\Date;
+
 class User extends Authenticatable
 {
+    use Date;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password', 'role_id'];
+    protected $fillable = ['name', 'email', 'password', 'role_id', 'poste'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -28,6 +32,21 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'email';
+    }
+
+    /**
+     * Scope a query to only include poste users active.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePoste($query)
+    {
+        return $query->select('id', 'name', 'poste')->where('active', TRUE)->orderBy('name', 'asc')->get();
     }
 
     /*

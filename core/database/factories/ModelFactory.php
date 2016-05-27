@@ -16,6 +16,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'name' => $faker->name,
         'email' => $faker->safeEmail,
         'password' => bcrypt('digESA123'),
+        'poste' => 'Secrétaire',
     ];
 });
 
@@ -25,5 +26,6 @@ $factory->define(App\Service::class, function (Faker\Generator $faker) {
         'identifier' => mt_rand(2, 10),
         'title' => ucfirst($title),
         'slug' => str_slug($title),
+        'agent_responsable' => 1,
     ];
 });

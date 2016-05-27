@@ -21,10 +21,6 @@
                 <!-- Authentication Links -->
                 @if ( Auth::check() )
                     <li class="{{ Request::is('home') ? 'active' : '' }}"><a href="{{ url('/home') }}">Dashboard</a></li>
-                    <li class="{{ Request::is('service') ? 'active' : '' }}"><a href="{{ route('service.index') }}">Services</a></li>
-                    @if ( Auth::user()->can('manage_permission') )
-                        <li class="{{ Request::is('permission') ? 'active' : '' }}"><a href="{{ route('permission.index') }}">Permissions</a></li>
-                    @endif
                 @endif
             </ul>
 
@@ -41,6 +37,8 @@
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
+                            <li class="{{ Request::is('profile/*') ? 'active' : '' }}"><a href="{{ route('profile', Auth::user()) }}">Mon compte</a></li>
+                            <li class="divider"></li>
                             <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Se déconnecter</a></li>
                         </ul>
                     </li>

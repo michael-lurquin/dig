@@ -19,12 +19,14 @@ class UsersTableSeeder extends Seeder
             'name' => 'Michaël LURQUIN',
             'email' => 'michael.lurquin@gmail.com',
             'password' => bcrypt('digESA123'),
+            'poste' => 'Informaticien / Développeur',
         ]);
         $user->assign('admin', $user);
         $user->services()->create([
             'identifier' => 1,
             'title' => 'Mon premier service',
             'slug' => 'mon-premier-service',
+            'agent_responsable' => 1,
         ]);
 
         // Génération d'un écrivain et d'un service qui l'a créé
