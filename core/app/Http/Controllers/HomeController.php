@@ -39,7 +39,7 @@ class HomeController extends Controller
     public function welcome()
     {
         $availabilities = array_flip($this->getListAvailability());
-        $services = \App\Service::where('availability_id', $availabilities['disponible'])->get();
+        $services = \App\Service::where('availability_id', $availabilities['Disponible'])->get();
 
         return view('welcome')->withServices($services);
     }
