@@ -250,8 +250,8 @@ class ServiceController extends Controller
 
     public function destroy(Request $request, Service $service)
     {
-    		$service->user_id = $request->user()->id;
-    		$service->save();
+		$service->user_id = $request->user()->id;
+		$service->save();
         $service->delete();
 
         return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été supprimé avec succès");
@@ -259,12 +259,12 @@ class ServiceController extends Controller
 
     public function restore(Request $request, $slug)
     {
-    		$service = Service::withTrashed()->whereSlug($slug)->first();
-    		$service->user_id = $request->user()->id;
-    		$service->deleted_at = NULL;
-    		$service->save();
+		$service = Service::withTrashed()->whereSlug($slug)->first();
+		$service->user_id = $request->user()->id;
+		$service->deleted_at = NULL;
+		$service->save();
 
-    		return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été restauré avec succès");
+		return redirect()->route('service.index')->withSuccess("Le service : <strong>$service->title</strong> a été restauré avec succès");
     }
 
     public function export(Request $request, Service $service)

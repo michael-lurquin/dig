@@ -13,7 +13,7 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        $roles = ['ecrivain', 'modérateur', 'admin'];
+        $roles = ['écrivain', 'modérateur', 'admin'];
         $nbrRoles = count($roles);
 
         for ($i = 0; $i < $nbrRoles; $i++)
