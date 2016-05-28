@@ -372,7 +372,7 @@
           {{ Form::label('agent_responsable_suppleant', 'Agent DIG responsable suppléant', ['class' => 'control-label']) }}
 
           <div class="btn-group bootstrap-select" style="display:block">
-            <select class="form-control selectpicker" multiple data-width="450px" name="agent_responsable_suppleant[]">
+            <select class="form-control selectpicker" multiple data-width="550px" name="agent_responsable_suppleant[]">
               @foreach($users as $user)
                 <option data-subtext="{{ $user->poste }}" value="{{ $user->id }}" {{ isset($service) && in_array($user->id, $service->ars) ? 'selected' : NULL }}>{{ $user->name }}</option>
               @endforeach
@@ -392,7 +392,7 @@
           {{ Form::label('autres_agents', 'Autres agents DIG impliqués', ['class' => 'control-label']) }}
 
           <div class="btn-group bootstrap-select" style="display:block">
-            <select class="form-control selectpicker" multiple data-width="450px" name="autres_agents[]">
+            <select class="form-control selectpicker" multiple data-width="550px" name="autres_agents[]">
               @foreach($users as $user)
                 <option data-subtext="{{ $user->poste }}" value="{{ $user->id }}" {{ isset($service) && in_array($user->id, $service->aai) ? 'selected' : NULL }}>{{ $user->name }}</option>
               @endforeach

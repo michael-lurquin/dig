@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder
 
         // Génération de 2 écrivains
         $users = factory(User::class, 2)->create([
-            'role_id' => $roles['écrivain'],
+            'role_id' => $roles['ecrivain'],
         ]);
 
         // Génération de 10 services

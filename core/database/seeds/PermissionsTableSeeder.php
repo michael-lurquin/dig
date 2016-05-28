@@ -88,7 +88,7 @@ class PermissionsTableSeeder extends Seeder
         $permissions_allowed = [
             'service_create',
         ];
-        $this->fillPermissions($permissions_allowed, 'écrivain');
+        $this->fillPermissions($permissions_allowed, 'ecrivain');
     }
 
     /**
