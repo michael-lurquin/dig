@@ -21,7 +21,7 @@
             </div>
             <a href="{{ route('service.index') }}">
                 <div class="panel-footer">
-                    <span class="pull-left">Gérer les services</span>
+                    <span class="pull-left">Gestion des services</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -43,7 +43,7 @@
             </div>
             <a href="{{ route('user.index') }}">
                 <div class="panel-footer">
-                    <span class="pull-left">Gérer les utilisateurs</span>
+                    <span class="pull-left">Gestion des utilisateurs</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -65,7 +65,7 @@
             </div>
             <a href="{{ route('availability.index') }}">
                 <div class="panel-footer">
-                    <span class="pull-left">Gérer les disponibilitées</span>
+                    <span class="pull-left">Gestion des disponibilitées</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
@@ -87,7 +87,7 @@
             </div>
             <a href="{{ route('category.index') }}">
                 <div class="panel-footer">
-                    <span class="pull-left">Gérer les catéories</span>
+                    <span class="pull-left">Gestion des catégories</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>

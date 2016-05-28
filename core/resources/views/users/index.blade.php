@@ -5,6 +5,9 @@
         <a href="{{ route('user.create') }}" class="btn btn-success pull-right">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nouvel utilisateur
         </a>
+        <a href="{{ route('permission.index') }}" class="btn btn-info pull-right" style="margin-right:7px">
+            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Gestion des permissions
+        </a>
         <h1>Liste des utilisateurs</h1>
     </div>
 
