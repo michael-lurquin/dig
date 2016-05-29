@@ -9,6 +9,7 @@ use App\Service;
 use App\User;
 use App\Behaviour\ListAvailability;
 use App\Behaviour\ListCategories;
+use PhpOffice\PhpWord\PhpWord;
 
 class ServiceController extends Controller
 {
@@ -277,6 +278,177 @@ class ServiceController extends Controller
 
     public function export(Request $request, Service $service)
     {
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+        $header = $section->addHeader();
 
+        // Logo
+        $header->addWatermark('img/COQ_SPW.png', ['marginTop' => 0, 'marginLeft' => -50]);
+
+        // Styles
+        $phpWord->addTitleStyle(1, ['name' => 'Calibri', 'size' => 26], ['align' => 'center']);
+        $phpWord->addTitleStyle(2, ['name' => 'Calibri', 'size' => 16], ['align' => 'center']);
+        $phpWord->addFontStyle('title', ['name' => 'Calibri', 'size' => 11, 'bold' => TRUE]);
+        $phpWord->addFontStyle('text', ['name' => 'Calibri', 'size' => 11]);
+
+        // Titre
+        $section->addTextBreak(5);
+        $section->addTitle($service->title, 1);
+
+        // Description du service
+        $section->addTextBreak(2);
+        $section->addText('Identifiant du service : ', 'title');
+        $section->addText('DIG-CATEG-' . $service->identifier, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Disponibilité : ', 'title');
+        $section->addText($service->availability->name, 'text');
+
+        $section->addTextBreak();
+        $section->addTitle('Description du service', 2);
+
+        $section->addTextBreak();
+        $section->addText('Catégorie(s) :', 'title');
+        foreach($service->categories as $category)
+        {
+          $section->addListItem($category->name, 0, 'text');
+        }
+
+        $section->addTextBreak();
+        $section->addText('Description de(s) (la) catégorie(s) : ', 'title');
+        $section->addText($service->description_categorie, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Contexte : ', 'title');
+        $section->addText($service->contexte, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Description : ', 'title');
+        $section->addText($service->description, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Éléments exclus du primètre : ', 'title');
+        $section->addText($service->exclus_perimetre, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Prérequis : ', 'title');
+        $section->addText($service->prerequis, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Contact général : ', 'title');
+        $section->addText($service->contact_general, 'text');
+
+        // Délais et coûts
+        $section->addPageBreak();
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addTitle('Délais et coûts', 2);
+
+        $section->addTextBreak();
+        $section->addText('Coût pour le client : ', 'title');
+        $section->addText($service->cout_client . ' €', 'text');
+
+        $section->addTextBreak();
+        $section->addText('Délai de prise en charge : ', 'title');
+        $section->addText($service->delai_charge . ' jour(s)', 'text');
+
+        $section->addTextBreak();
+        $section->addText('Délai de mise en oeuvre par la DIG : ', 'title');
+        $section->addText($service->delai_oeuvre . ' jour(s)', 'text');
+
+        $section->addTextBreak();
+        $section->addText('Délai dépendant de tiers : ', 'title');
+        $section->addText($service->delai_tiers . ' jour(s)', 'text');
+
+        $section->addTextBreak();
+        $section->addText('Marge de sécurité : ', 'title');
+        $section->addText($service->marge_securite . ' jour(s)', 'text');
+
+        $section->addTextBreak();
+        $section->addText('Délai de réalisation : ', 'title');
+        $section->addText($service->getDelaiRealisation() . ' jour(s)', 'text');
+
+        $section->addTextBreak();
+        $section->addText('Remarque éventuelle sur le délai de réalisation : ', 'title');
+        $section->addText($service->remarque_delai, 'text');
+
+        $section->addTextBreak();
+        $section->addText('RH interne : ', 'title');
+        $section->addText($service->rh_interne, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Coût d\'externalisation : ', 'title');
+        $section->addText($service->cout_externalisation . ' €', 'text');
+
+        // Intervenants et procédure
+        $section->addPageBreak();
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addTitle('Intervenants et procédure', 2);
+
+        $section->addTextBreak();
+        $section->addText('Agent DIG responsable : ', 'title');
+        $section->addText(User::findOrFail($service->agent_responsable)->name, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Agent DIG responsable suppléant : ', 'title');
+        foreach($service->ars as $ars)
+        {
+          $section->addListItem($ars->name, 0, 'text');
+        }
+
+        $section->addTextBreak();
+        $section->addText('Autres agents DIG impliqués : ', 'title');
+        foreach($service->aai as $aai)
+        {
+          $section->addListItem($aai->name, 0, 'text');
+        }
+
+        $section->addTextBreak();
+        $section->addText('Intervenants externes : ', 'title');
+        $section->addText($service->intervenants_externes, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Identifiant procédure : ', 'title');
+        $section->addText($service->identifiant_procedure, 'text');
+
+        $section->addTextBreak();
+        $section->addText('Résumé de la procédure : ', 'title');
+        $section->addText($service->resume_procedure, 'text');
+
+        $section->addTextBreak();
+        $section->addTextBreak();
+        $section->addText('Auteur / Dernière validation par : ', 'title');
+        $section->addText(User::findOrFail($service->user_id)->name, 'text');
+
+        // Export
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $filename = $service->slug . ".docx";
+        $filePath = "tmp/$filename";
+
+        $objWriter->save($filePath);
+
+        if (file_exists($filePath))
+        {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header("Content-Disposition: attachment; filename=$filename");
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filePath));
+
+            readfile($filePath);
+            unlink($filePath);
+        }
+        else
+        {
+            return redirect('/')->withError("Impossible d'exporter le service : <strong>$service->title</strong> !");
+        }
     }
 }

@@ -16,7 +16,7 @@
                     <th>Identifiant</th>
                     <th>Date de modification</th>
                     <th>Auteur</th>
-                    <th width="330">Actions</th>
+                    <th width="430">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +29,9 @@
                         <td>{{ $service->updated_at }}</td>
                         <td>{{ $service->user->name }}</td>
                         <td>
+                          <a href="{{ action('ServiceController@export', ['service' => $service->slug]) }}" class="btn btn-warning">
+                              <i class="fa fa-file-word-o" aria-hidden="true"></i> Exporter
+                          </a>
                         	@if ( !$service->trashed() )
                             <a href="{{ route('service.revisions', $service->slug) }}" class="btn btn-info">
                                 <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Révisions

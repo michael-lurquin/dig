@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('service/{service}/revisions', ['uses' => 'RevisionController@index', 'as' => 'service.revisions'])->where(['service' => '[a-z-\-0-9]+']);
     Route::get('service/{service}/revisions/{id}/confirm', 'RevisionController@valid')->where(['service' => '[a-z-\-0-9]+', 'id' => '[0-9]+']);
     Route::get('service/{service}/revisions/{id}/restore', 'RevisionController@restore')->where(['service' => '[a-z-\-0-9]+', 'id' => '[0-9]+']);
-    Route::delete('revision/{id}', 'RevisionController@destroy')->name('revision.destroy')->where(['service' => '[a-z-\-0-9]+', 'id' => '[0-9]+']);
+    Route::delete('revision/{id}', 'RevisionController@destroy')->name('revision.destroy')->where(['id' => '[0-9]+']);
 
     // Permissions
     Route::get('permission', ['uses' => 'PermissionController@index', 'as' => 'permission.index']);
