@@ -18,7 +18,9 @@ class ServiceController extends Controller
     private $dontKeepRevision = [
         'identifier',
         'slug',
-        'delai_realisation',
+        'category_id',
+        'agent_responsable_suppleant',
+        'autres_agents',
     ];
 
     public function __construct()
@@ -222,25 +224,31 @@ class ServiceController extends Controller
                         }
                         else
                         {
-                            $service->revisions()->create([
-                                'name' => $request->get('name'),
-                                'user_id' => $request->user()->id,
-                                'field' => $field,
-                                'old_value' => isset($originalData[$field][$id]) ? $originalData[$field][$id] : NULL,
-                                'new_value' => isset($updatedData[$field][$id]) ? $updatedData[$field][$id] : NULL,
-                            ]);
+                            if ( $originalData[$field][$id] != $updatedData[$field][$id] )
+                            {
+                                $service->revisions()->create([
+                                    'name' => $request->get('name'),
+                                    'user_id' => $request->user()->id,
+                                    'field' => $field,
+                                    'old_value' => isset($originalData[$field][$id]) ? $originalData[$field][$id] : NULL,
+                                    'new_value' => isset($updatedData[$field][$id]) ? $updatedData[$field][$id] : NULL,
+                                ]);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    $service->revisions()->create([
-                        'name' => $request->get('name'),
-                        'user_id' => $request->user()->id,
-                        'field' => $field,
-                        'old_value' => isset($originalData[$field]) ? $originalData[$field] : NULL,
-                        'new_value' => isset($updatedData[$field]) ? $updatedData[$field] : NULL,
-                    ]);
+                    if ( $originalData[$field] != $updatedData[$field] )
+                    {
+                        $service->revisions()->create([
+                            'name' => $request->get('name'),
+                            'user_id' => $request->user()->id,
+                            'field' => $field,
+                            'old_value' => isset($originalData[$field]) ? $originalData[$field] : NULL,
+                            'new_value' => isset($updatedData[$field]) ? $updatedData[$field] : NULL,
+                        ]);
+                    }
                 }
             }
         }

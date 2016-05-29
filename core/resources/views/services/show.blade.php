@@ -5,6 +5,11 @@
         <h1>{{ $service->title }} <small>{{ $service->identifier }}</small></h1>
     </div>
 
+    <h4>Disponibilité:</h4>
+    @if (!empty($service->availability_id))
+      <p>{{ $service->availability->name }}</p>
+    @endif
+
     <br />
 
     <div class="page-header text-right">

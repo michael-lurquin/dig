@@ -35,7 +35,7 @@ $factory->define(App\Service::class, function (Faker\Generator $faker) {
         'description' => $faker->paragraph(),
         'exclus_perimetre' => $faker->paragraph(),
         'prerequis' => $faker->paragraph(),
-        'contact_general' => $faker->address,
+        'contact_general' => $faker->streetAddress . ' - ' . $faker->postcode . ' ' . $faker->city,
         'cout_client' => $faker->numberBetween(10, 1000),
         'delai_charge' => $faker->numberBetween(0, 50),
         'delai_oeuvre' => $faker->numberBetween(0, 50),
