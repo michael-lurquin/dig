@@ -8,7 +8,7 @@
 @if ( count($roles) )
     {!! Form::model($permissions, ['route' => 'permission.update']) !!}
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered table_permissions">
+            <table class="table table-striped table-hover table-bordered table_permissions no_css">
                 <thead>
                     <tr>
                         <th>Nom de la permission</th>

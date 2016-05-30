@@ -20,7 +20,7 @@
             <ul class="nav navbar-nav">
                 <!-- Authentication Links -->
                 @if ( Auth::check() )
-                    <li class="{{ Request::is('home') ? 'active' : '' }}"><a href="{{ url('/dashboard') }}">Dashboard</a></li>
+                    <li class="{{ Request::is('dashboard') ? 'active' : '' }}"><a href="{{ url('/dashboard') }}">Dashboard</a></li>
                 @endif
             </ul>
 
