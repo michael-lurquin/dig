@@ -11,13 +11,14 @@
                         {!! csrf_field() !!}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} required">
-                            <label class="col-md-4 control-label">Adresse e-mail</label>
+                            {{ Form::label('email', 'Adresse e-mail', ['class' => 'control-label col-md-4']) }}
 
                             <div class="col-md-6">
-                                <input type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                {{ Form::email('email', old('email'), ['class' => 'form-control', 'placeholder' => 'admin@dig.be']) }}
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
+
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
@@ -25,14 +26,14 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }} required">
-                            <label class="col-md-4 control-label">Mot de passe</label>
+                            {{ Form::label('password', 'Mot de passe', ['class' => 'control-label col-md-4']) }}
 
                             <div class="col-md-6">
-                                <input type="password" class="form-control" name="password">
+                                {{ Form::password('password', ['class' => 'form-control', 'placeholder' => 'digESA123']) }}
 
                                 @if ($errors->has('password'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
+                                        <strong>{{ $errors->first('password', ['placeholder' => 'digESA123']) }}</strong>
                                     </span>
                                 @endif
                             </div>

@@ -24,8 +24,8 @@ class UsersTableSeeder extends Seeder
 
         // Génération d'un administrateur
         $admin = User::create([
-            'name' => 'Michaël LURQUIN',
-            'email' => 'michael.lurquin@gmail.com',
+            'name' => 'Admin',
+            'email' => 'admin@dig.be',
             'password' => bcrypt('digESA123'),
             'poste' => 'Informaticien / Développeur',
         ]);
