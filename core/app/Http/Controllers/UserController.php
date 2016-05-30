@@ -23,7 +23,7 @@ class UserController extends Controller
     // Retourne le tableau qui liste tous utilisateurs : /user : GET
     public function index(Request $request)
     {
-        $users = User::with('role')->get();
+        $users = User::with('role')->paginate(10);
 
         return view('users.index')->withUsers($users);
     }

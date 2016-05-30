@@ -55,6 +55,8 @@
         </table>
     </div>
 
+    {!! $users->render() !!}
+
     <!-- Modal -->
     @foreach ($users as $user)
         <div class="modal fade" id="myModal{{ $user->id }}" role="dialog">

@@ -16,13 +16,12 @@ class AvailabilityController extends Controller
     public function __construct()
     {
         $this->middleware('permission:manage_availabilities');
-        $this->list_availabilities = $this->getListAvailability();
     }
 
     // Retourne la vue qui liste toutes les disponibilitées : /availability : GET
     public function index(Request $request)
     {
-        return view('availabilities.index')->withAvailabilities($this->list_availabilities);
+        return view('availabilities.index')->withAvailabilities($this->getListAvailability(TRUE));
     }
 
     // Retourne la vue de création d'une disponibilitée : /availability/create : GET
@@ -36,7 +35,7 @@ class AvailabilityController extends Controller
     {
         $availability = Availability::create([
           'name'      => $request->name,
-          'weight'    => count($this->list_availabilities),
+          'weight'    => count($this->getListAvailability()),
         ]);
 
         return redirect()->route('availability.index')->withSuccess("La disponibilité : <strong>$request->name</strong> a été créée avec succès");

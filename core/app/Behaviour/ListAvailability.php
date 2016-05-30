@@ -5,8 +5,8 @@ use App\Availability;
 trait ListAvailability
 {
     // Récupère la liste (id et nom) des disponibilitées triés par poids
-    private function getListAvailability()
+    private function getListAvailability($paginate = FALSE)
     {
-        return Availability::orderBy('weight', 'asc')->lists('name', 'id')->toArray();
+        return $paginate ? Availability::orderBy('weight', 'asc')->paginate(10) : Availability::orderBy('weight', 'asc')->lists('name', 'id')->toArray();
     }
 }
