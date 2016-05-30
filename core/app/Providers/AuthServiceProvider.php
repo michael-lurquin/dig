@@ -43,9 +43,18 @@ class AuthServiceProvider extends ServiceProvider
     protected function getPermissions()
     {
         // Vérification de la présence de la table 'permissions'
-        $check = DB::select('SELECT COUNT(*) as `exists` FROM information_schema.tables WHERE table_name = "permissions" AND table_schema = database()')[0];
+        $db = \Config::get('database.default');
 
-        if ( $check->exists == TRUE )
+        if ($db == 'pgsql')
+        {
+            $check = DB::select("SELECT COUNT(*) AS exist FROM information_schema.tables WHERE table_name = 'permissions' AND table_schema = 'public'");
+        }
+        else
+        {
+            $check = DB::select("SELECT COUNT(*) AS exist FROM information_schema.tables WHERE table_name = 'permissions' AND table_schema = 'dig'");
+        }
+
+        if ( $check[0]->exist == TRUE )
         {
             return Permission::with('roles')->get();
         }
