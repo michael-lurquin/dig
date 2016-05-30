@@ -62,6 +62,8 @@
         </table>
     </div>
 
+    {!! $services->render() !!}
+
     <!-- Modal -->
     @foreach ($services as $service)
         <div class="modal fade" id="myModal{{ $service->id }}" role="dialog">

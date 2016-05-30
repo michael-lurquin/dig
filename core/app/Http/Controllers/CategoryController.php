@@ -21,7 +21,7 @@ class CategoryController extends Controller
     // Retourne la vue qui liste toutes les catégories : /category : GET
     public function index(Request $request)
     {
-        $categories = $this->getListCategories();
+        $categories = $this->getListCategories(TRUE);
 
         return view('categories.index')->withCategories($categories);
     }

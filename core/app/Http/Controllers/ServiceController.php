@@ -37,11 +37,11 @@ class ServiceController extends Controller
     {
     		if ( $request->user()->can('service_restore') )
     		{
-    		  $services = Service::withTrashed()->with('user')->get();
+    		  $services = Service::withTrashed()->with('user')->paginate(10);
     		}
     		else
     		{
-    		  $services = Service::with('user')->get();
+    		  $services = Service::with('user')->paginate(10);
     		}
 
         return view('services.index')->withServices($services);

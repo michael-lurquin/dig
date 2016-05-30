@@ -5,8 +5,8 @@ use App\Category;
 trait ListCategories
 {
     // Récupère la liste (id et nom) des catégories triés par poids
-    private function getListCategories()
+    private function getListCategories($paginate = FALSE)
     {
-        return Category::orderBy('weight', 'asc')->lists('name', 'id')->toArray();
+        return $paginate ? Category::orderBy('weight', 'asc')->paginate(10) : Category::orderBy('weight', 'asc')->lists('name', 'id')->toArray();
     }
 }

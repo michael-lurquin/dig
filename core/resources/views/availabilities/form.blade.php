@@ -9,4 +9,5 @@
   @endif
 </div>
 
+<a href="{{ route('availability.index') }}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Annuler</a>
 {{ Form::submit('Enregistrer', ['class' => 'btn btn-primary']) }}

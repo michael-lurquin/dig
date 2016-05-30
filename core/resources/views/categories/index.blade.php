@@ -17,14 +17,14 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($categories as $id => $name)
+                @forelse ($categories as $category)
                     <tr>
-                      <td>{{ $name }}</td>
+                      <td>{{ $category->name }}</td>
                       <td>
-                        <a href="{{ route('category.edit', $name) }}" class="btn btn-primary">
+                        <a href="{{ route('category.edit', $category->name) }}" class="btn btn-primary">
                           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Modifier
                         </a>
-                        <a href="#" data-toggle="modal" data-target="#myModal{{ $id }}" class="btn btn-danger">
+                        <a href="#" data-toggle="modal" data-target="#myModal{{ $category->id }}" class="btn btn-danger">
                           <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Supprimer
                         </a>
                       </td>
@@ -38,9 +38,11 @@
         </table>
     </div>
 
+    {!! $categories->render() !!}
+
     <!-- Modal -->
-    @foreach ($categories as $id => $name)
-        <div class="modal fade" id="myModal{{ $id }}" role="dialog">
+    @foreach ($categories as $category)
+        <div class="modal fade" id="myModal{{ $category->id }}" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -52,11 +54,11 @@
               </div>
 
               <div class="modal-body">
-                <p>Voulez-vous vraiment supprimer la catégorie : <strong>{{ $name }}</strong> ?</p>
+                <p>Voulez-vous vraiment supprimer la catégorie : <strong>{{ $category->name }}</strong> ?</p>
               </div>
 
               <div class="modal-footer">
-                {!! Form::open(['route' => ['category.destroy', $name], 'method' => 'DELETE']) !!}
+                {!! Form::open(['route' => ['category.destroy', $category->name], 'method' => 'DELETE']) !!}
                   <button type="submit" class="btn btn-danger">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Supprimer
                   </button>

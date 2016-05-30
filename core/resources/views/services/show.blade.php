@@ -150,4 +150,7 @@
       <p>{{ \App\User::findOrFail($service->user_id)->name }}, le {{ date_format($service->created_at, 'd/m/Y') }} à {{ date_format($service->created_at, 'H:i') }}</p>
     </blockquote>
 
+    <br />
+    <a href="{{ route('service.index') }}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Retour</a>
+
 @endsection
