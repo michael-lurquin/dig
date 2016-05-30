@@ -11,13 +11,15 @@
 |
 */
 
+// Routes non-authentifiées
 Route::get('/home', 'HomeController@index');
 Route::get('/', 'HomeController@welcome');
 
 Route::auth();
 
+// Routes avec authentification
 Route::group(['middleware' => 'auth'], function () {
-
+  
     // Services
     Route::resource('service', 'ServiceController');
     Route::get('service/{service}/restore', 'ServiceController@restore')->where(['service' => '[a-z-\-0-9]+']);
@@ -47,4 +49,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('availability', 'AvailabilityController');
 });
 
+// Route non-authentifiée qui écrase la même route qui se trouve dans les routes authentifiées
 Route::get('service/{service}/show', ['uses' => 'ServiceController@show', 'as' => 'service.show'])->where(['service' => '[a-z-\-0-9]+']);

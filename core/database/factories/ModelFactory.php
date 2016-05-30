@@ -11,6 +11,7 @@
 |
 */
 
+// Génération d'un utilisateur
 $factory->define(App\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
@@ -22,6 +23,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+// Génération d'un service
 $factory->define(App\Service::class, function (Faker\Generator $faker) {
     $title = implode(' ', $faker->words(3));
     return [

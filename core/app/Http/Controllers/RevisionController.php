@@ -9,6 +9,7 @@ use App\Service;
 
 class RevisionController extends Controller
 {
+    // Vérification des permissions de l'utilisateur, a-t-il la permission de "valider les révisions", "supprimer les révisions" et "restaurer les révisions"
     public function __construct()
     {
         $this->middleware('permission:revision_validate', ['only' => 'valid']);
@@ -16,6 +17,7 @@ class RevisionController extends Controller
         $this->middleware('permission:revision_restore', ['only' => 'restore']);
     }
 
+    // Tableau des révisions du service
     public function index($slug)
     {
         $service = Service::with('revisions')->whereSlug($slug)->first();
@@ -31,6 +33,7 @@ class RevisionController extends Controller
         return view('services.revisions')->withService($service);
     }
 
+    // callback qui enregistre les validations et qui supprime toutes les autres révisions du champ (en question)
     public function valid(Request $request, $slug, $id)
     {
         $revision = Revision::findOrFail($id);
@@ -40,50 +43,50 @@ class RevisionController extends Controller
 
         $service = Service::whereSlug($slug)->first();
 
-        if ( $revision->field == 'category_id' )
-        {
-            // Ajout
-            if ( empty($revision->old_value) && !empty($revision->new_value) )
-            {
-                $service->categories()->attach([$revision->new_value]);
-            }
-            // Suppression
-            elseif ( !empty($revision->old_value) && empty($revision->new_value) )
-            {
-                $service->categories()->detach([$revision->old_value]);
-            }
-        }
-        elseif ( $revision->field == 'agent_responsable_suppleant' )
-        {
-            // Ajout
-            if ( empty($revision->old_value) && !empty($revision->new_value) )
-            {
-                $service->ars()->attach([$revision->new_value]);
-            }
-            // Suppression
-            elseif ( !empty($revision->old_value) && empty($revision->new_value) )
-            {
-                $service->ars()->detach([$revision->old_value]);
-            }
-        }
-        elseif ( $revision->field == 'autres_agents' )
-        {
-            // Ajout
-            if ( empty($revision->old_value) && !empty($revision->new_value) )
-            {
-                $service->aai()->attach([$revision->new_value]);
-            }
-            // Suppression
-            elseif ( !empty($revision->old_value) && empty($revision->new_value) )
-            {
-                $service->aai()->detach([$revision->old_value]);
-            }
-        }
-        else
-        {
+        // if ( $revision->field == 'category_id' )
+        // {
+        //     // Ajout
+        //     if ( empty($revision->old_value) && !empty($revision->new_value) )
+        //     {
+        //         $service->categories()->attach([$revision->new_value]);
+        //     }
+        //     // Suppression
+        //     elseif ( !empty($revision->old_value) && empty($revision->new_value) )
+        //     {
+        //         $service->categories()->detach([$revision->old_value]);
+        //     }
+        // }
+        // elseif ( $revision->field == 'agent_responsable_suppleant' )
+        // {
+        //     // Ajout
+        //     if ( empty($revision->old_value) && !empty($revision->new_value) )
+        //     {
+        //         $service->ars()->attach([$revision->new_value]);
+        //     }
+        //     // Suppression
+        //     elseif ( !empty($revision->old_value) && empty($revision->new_value) )
+        //     {
+        //         $service->ars()->detach([$revision->old_value]);
+        //     }
+        // }
+        // elseif ( $revision->field == 'autres_agents' )
+        // {
+        //     // Ajout
+        //     if ( empty($revision->old_value) && !empty($revision->new_value) )
+        //     {
+        //         $service->aai()->attach([$revision->new_value]);
+        //     }
+        //     // Suppression
+        //     elseif ( !empty($revision->old_value) && empty($revision->new_value) )
+        //     {
+        //         $service->aai()->detach([$revision->old_value]);
+        //     }
+        // }
+        // else
+        // {
             $service = Service::whereSlug($slug)->first();
             $service->{$revision->field} = $revision->new_value;
-        }
+        // }
 
         $service->save();
 
@@ -94,6 +97,7 @@ class RevisionController extends Controller
         return redirect()->route('service.revisions', $service->slug)->withSuccess("La validation du champ : <strong>$fieldFormatter</strong> à la valeur : <strong>$revision->new_value</strong> à été validé avec succès");
     }
 
+    // callback : Restauration d'une révision
     public function restore($slug, $id)
     {
         $revision = Revision::findOrFail($id);
@@ -109,6 +113,7 @@ class RevisionController extends Controller
         return redirect()->route('service.revisions', $service->slug)->withSuccess("La restauration du champ : <strong>$fieldFormatter</strong> à la valeur : <strong>$revision->old_value</strong> à effectuée avec succès");
     }
 
+    // Suppression d'une révision
     public function destroy($id)
     {
         $revision = Revision::with('user')->findOrFail($id);

@@ -6,6 +6,8 @@
   </div>
 
   <div class="row">
+
+    @if ( Auth::user()->can('service_create') )
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -28,6 +30,9 @@
             </a>
         </div>
     </div>
+    @endif
+
+    @if ( Auth::user()->can('manage_users') )
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-green">
             <div class="panel-heading">
@@ -50,6 +55,9 @@
             </a>
         </div>
     </div>
+    @endif
+
+    @if ( Auth::user()->can('manage_availabilities') )
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
@@ -72,6 +80,9 @@
             </a>
         </div>
     </div>
+    @endif
+
+    @if ( Auth::user()->can('manage_categories') )
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-red">
             <div class="panel-heading">
@@ -94,5 +105,7 @@
             </a>
         </div>
     </div>
+    @endif
+
   </div>
 @endsection

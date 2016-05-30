@@ -21,11 +21,7 @@ class HomeController extends Controller
         $this->middleware('auth', ['except' => ['welcome']]);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    // Vue qui affiche le tableau de bord, une fois l'utilisateur connecté
     public function index()
     {
         $servicesCount = \App\Service::count();
@@ -36,6 +32,7 @@ class HomeController extends Controller
         return view('home')->withServices($servicesCount)->withUsers($usersCount)->withAvailabilities($availabilitiesCount)->withCategories($categoriesCount);
     }
 
+    // Vue d'accueil du site qui retourne tous les services disponible
     public function welcome()
     {
         $availabilities = array_flip($this->getListAvailability());

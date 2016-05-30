@@ -20,9 +20,7 @@ class Permission extends Model
      */
     public $timestamps = FALSE;
 
-    /**
-     * Relationships
-     */
+    // Relation N:N avec l'entité "Role"
     public function roles()
     {
         return $this->belongsToMany(Role::class);

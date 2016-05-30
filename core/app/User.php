@@ -24,16 +24,19 @@ class User extends Authenticatable
      */
     protected $hidden = ['password', 'remember_token'];
 
+    // Relation N:1 avec l'entité "Service"
     public function services()
     {
         return $this->hasMany(Service::class);
     }
 
+    // Relation 1:N avec l'entité "Role"
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    // Chaîne utilisé dans l'URL pour identifier l'utilisateur (par l'email et non par l'id)
     public function getRouteKeyName()
     {
         return 'email';

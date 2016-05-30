@@ -16,7 +16,7 @@
                     <th>Identifiant</th>
                     <th>Date de modification</th>
                     <th>Auteur</th>
-                    <th width="430">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>

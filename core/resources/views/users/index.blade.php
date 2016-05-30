@@ -5,9 +5,11 @@
         <a href="{{ route('user.create') }}" class="btn btn-success pull-right">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nouvel utilisateur
         </a>
-        <a href="{{ route('permission.index') }}" class="btn btn-info pull-right" style="margin-right:7px">
-            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Gestion des permissions
-        </a>
+        @if ( Auth::user()->can('manage_permissions') )
+          <a href="{{ route('permission.index') }}" class="btn btn-info pull-right" style="margin-right:7px">
+              <span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Gestion des permissions
+          </a>
+        @endif
         <h1>Liste des utilisateurs</h1>
     </div>
 
@@ -19,7 +21,7 @@
                     <th>Email</th>
                     <th>Rôle</th>
                     <th>Date d'inscription</th>
-                    <th width="225">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>

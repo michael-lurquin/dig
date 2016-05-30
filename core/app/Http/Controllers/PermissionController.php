@@ -14,16 +14,13 @@ class PermissionController extends Controller
 {
     use ListRoles;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    // Vérification des permissions de l'utilisateur, a-t-il la permission de gestion des permissions
     public function __construct()
     {
         $this->middleware('permission:manage_permissions');
     }
 
+    // Retourne le tableau qui liste toutes les permissions : /permission : GET
     public function index()
     {
         $roles = $this->getListRoles();
@@ -33,6 +30,7 @@ class PermissionController extends Controller
         return view('permissions.index')->withRoles($roles)->withPermissions($permissions);
     }
 
+    // Enregistrement des permissions cochées dans le tableau des permisisons
     public function update(Request $request)
     {
         $permissions = $request->get('permissions');

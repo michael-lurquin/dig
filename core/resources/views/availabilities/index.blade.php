@@ -13,18 +13,18 @@
             <thead>
                 <tr>
                     <th>Nom</th>
-                    <th width="225">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($availabilities as $availability)
+                @forelse ($availabilities as $id => $name)
                     <tr>
-                      <td>{{ $availability->name }}</td>
+                      <td>{{ $name }}</td>
                       <td>
-                        <a href="{{ route('availability.edit', $availability->name) }}" class="btn btn-primary">
+                        <a href="{{ route('availability.edit', $name) }}" class="btn btn-primary">
                           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Modifier
                         </a>
-                        <a href="#" data-toggle="modal" data-target="#myModal{{ $availability->id }}" class="btn btn-danger">
+                        <a href="#" data-toggle="modal" data-target="#myModal{{ $id }}" class="btn btn-danger">
                           <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Supprimer
                         </a>
                       </td>
@@ -39,8 +39,8 @@
     </div>
 
     <!-- Modal -->
-    @foreach ($availabilities as $availability)
-        <div class="modal fade" id="myModal{{ $availability->id }}" role="dialog">
+    @foreach ($availabilities as $id => $name)
+        <div class="modal fade" id="myModal{{ $id }}" role="dialog">
           <div class="modal-dialog">
 
             <!-- Modal content-->
@@ -52,11 +52,11 @@
               </div>
 
               <div class="modal-body">
-                <p>Voulez-vous vraiment supprimer la disponibilitée : <strong>{{ $availability->name }}</strong> ?</p>
+                <p>Voulez-vous vraiment supprimer la disponibilitée : <strong>{{ $name }}</strong> ?</p>
               </div>
 
               <div class="modal-footer">
-                {!! Form::open(['route' => ['availability.destroy', $availability->name], 'method' => 'DELETE']) !!}
+                {!! Form::open(['route' => ['availability.destroy', $name], 'method' => 'DELETE']) !!}
                   <button type="submit" class="btn btn-danger">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Supprimer
                   </button>

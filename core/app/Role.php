@@ -42,14 +42,13 @@ class Role extends Model
         }
     }
 
-    /**
-     * Relationships
-     */
+    // Relation N:1 avec l'entité "User"
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
+    // Relation N:N avec l'entité "Permission"
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);

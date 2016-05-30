@@ -6,25 +6,32 @@ use Illuminate\Http\Request;
 use App\Http\Requests\AvailabilityRequest;
 
 use App\Availability;
+use App\Behaviour\ListAvailability;
 
 class AvailabilityController extends Controller
 {
+    use ListAvailability;
+
+    // Vérification des permissions de l'utilisateur, a-t-il la permission de gestion des disponibilitées
     public function __construct()
     {
         $this->middleware('permission:manage_availabilities');
-        $this->list_availabilities = Availability::all();
+        $this->list_availabilities = $this->getListAvailability();
     }
 
+    // Retourne la vue qui liste toutes les disponibilitées : /availability : GET
     public function index(Request $request)
     {
         return view('availabilities.index')->withAvailabilities($this->list_availabilities);
     }
 
+    // Retourne la vue de création d'une disponibilitée : /availability/create : GET
     public function create()
     {
         return view('availabilities.create');
     }
 
+    // Enregistre la création d'une disponibilitée : POST
     public function store(AvailabilityRequest $request)
     {
         $availability = Availability::create([
@@ -35,11 +42,13 @@ class AvailabilityController extends Controller
         return redirect()->route('availability.index')->withSuccess("La disponibilité : <strong>$request->name</strong> a été créée avec succès");
     }
 
+    // Retourne la vue d'édition d'une disponibilitées : /availability/xxx/edit
     public function edit(Availability $availability)
     {
         return view('availabilities.edit')->withAvailability($availability);
     }
 
+    // Enregistre la modification d'une disponibilitée : PUT
     public function update(AvailabilityRequest $request, Availability $availability)
     {
         $availability->name = $request->name;
@@ -48,6 +57,7 @@ class AvailabilityController extends Controller
         return redirect()->route('availability.index')->withSuccess("La disponibilité : <strong>$request->name</strong> a été modifiée avec succès");
     }
 
+    // Supprime une disponibilitée : /availability/xxx : DELETE
     public function destroy(Request $request, Availability $availability)
     {
         $availability->delete();

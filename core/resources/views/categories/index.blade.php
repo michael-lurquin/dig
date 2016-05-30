@@ -13,7 +13,7 @@
             <thead>
                 <tr>
                     <th>Nom</th>
-                    <th width="225">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>

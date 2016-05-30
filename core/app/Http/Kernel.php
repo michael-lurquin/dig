@@ -46,9 +46,9 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
+        'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class, // Vérification si l'utilisateur possède bien la permission (principalement dans les vues)
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'permission' => \App\Http\Middleware\CheckPermission::class,
+        'permission' => \App\Http\Middleware\CheckPermission::class, // Vérification si l'utilisateur possède bien la permission dans les controller
     ];
 }

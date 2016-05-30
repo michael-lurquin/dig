@@ -2,8 +2,9 @@
 
 use App\Service;
 
-trait Sluggable {
-
+trait Sluggable
+{
+    // Enregitre le slug du service
     public function setSlugAttribute($value)
     {
         if ( empty($value) )
@@ -19,20 +20,21 @@ trait Sluggable {
         }
     }
 
-    private function makeSlugUnique($slug)
-    {
-        $list = $this->getExistingSlugs($slug)->toArray();
+    // private function makeSlugUnique($slug)
+    // {
+    //     $list = $this->getExistingSlugs($slug)->toArray();
+    //
+    //     if ( count($list) === 0 || !in_array($slug, $list) || (array_key_exists($this->getKey(), $list) && $list[$this->getKey()] === $slug) )
+    //     {
+    //         return $slug;
+    //     }
+    //
+    //     $suffix = $this->generateSuffix($slug, $list);
+    //
+    //     return $slug . '-' . $suffix;
+    // }
 
-        if ( count($list) === 0 || !in_array($slug, $list) || (array_key_exists($this->getKey(), $list) && $list[$this->getKey()] === $slug) )
-        {
-            return $slug;
-        }
-
-        $suffix = $this->generateSuffix($slug, $list);
-
-        return $slug . '-' . $suffix;
-    }
-
+    // Si le slug n'est pas unique, je rajoute "-n" à la fin du slug
     protected function generateSuffix($slug, $list)
     {
         $separator = '-';
@@ -56,6 +58,7 @@ trait Sluggable {
         return reset($list) + 1;
     }
 
+    // Vérification que le slug du service soit unique
     private function getExistingSlugs($slug)
     {
         $instance = new static;

@@ -20,11 +20,13 @@ class Category extends Model
      */
     public $timestamps = FALSE;
 
+    // Relation N:N avec l'entité "Service"
     public function services()
     {
         return $this->belongsToMany(Service::class);
     }
 
+    // Chaîne utilisé dans l'URL pour identifier la catégorie (par le nom et non par l'id)
     public function getRouteKeyName()
     {
         return 'name';
