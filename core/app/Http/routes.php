@@ -14,6 +14,7 @@
 // Routes non-authentifiées
 Route::get('/dashboard', 'HomeController@index');
 Route::get('/', 'HomeController@welcome');
+Route::get('service/{service}/export', 'ServiceController@export')->where(['service' => '[a-z-\-0-9]+']);
 
 Route::auth();
 
@@ -23,7 +24,6 @@ Route::group(['middleware' => 'auth'], function () {
     // Services
     Route::resource('service', 'ServiceController');
     Route::get('service/{service}/restore', 'ServiceController@restore')->where(['service' => '[a-z-\-0-9]+']);
-    Route::get('service/{service}/export', 'ServiceController@export')->where(['service' => '[a-z-\-0-9]+']);
 
     // Révisions
     Route::get('service/{service}/revisions', ['uses' => 'RevisionController@index', 'as' => 'service.revisions'])->where(['service' => '[a-z-\-0-9]+']);
