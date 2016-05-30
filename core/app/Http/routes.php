@@ -12,7 +12,7 @@
 */
 
 // Routes non-authentifiées
-Route::get('/dashboard', 'HomeController@index');
+Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/', 'HomeController@welcome');
 Route::get('service/{service}/export', 'ServiceController@export')->where(['service' => '[a-z-\-0-9]+']);
 

@@ -15,7 +15,7 @@
 
     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} required">
       {{ Form::label('email', 'Adresse email', ['class' => 'control-label']) }}
-      {{ Form::email('email', old('email'), ['class' => 'form-control', $hasPermission == FALSE ? 'disabled' : NULL ]) }}
+      {{ Form::email('email', old('email'), ['class' => 'form-control', isset($hasPermission) && !$hasPermission ? 'disabled' : NULL ]) }}
 
       @if ($errors->has('email'))
         <span class="help-block">
@@ -26,7 +26,7 @@
 
     <div class="form-group{{ $errors->has('poste') ? ' has-error' : '' }} required">
       {{ Form::label('poste', 'Poste', ['class' => 'control-label']) }}
-      {{ Form::text('poste', old('poste'), ['class' => 'form-control', $hasPermission == FALSE ? 'disabled' : NULL ]) }}
+      {{ Form::text('poste', old('poste'), ['class' => 'form-control', isset($hasPermission) && !$hasPermission ? 'disabled' : NULL ]) }}
 
       @if ($errors->has('poste'))
         <span class="help-block">
@@ -39,7 +39,7 @@
       {{ Form::label('role_id', 'Rôle', ['class' => 'control-label']) }}
 
       <div class="btn-group bootstrap-select" style="display:block">
-        <select class="form-control selectpicker" data-width="250px" name="role_id"{{ !$hasPermission ? ' disabled' : ''}}>
+        <select class="form-control selectpicker" data-width="250px" name="role_id"{{ isset($hasPermission) && !$hasPermission ? ' disabled' : ''}}>
           @foreach ($roles as $rid => $name)
             <option value="{{ $rid }}"{{ !empty($user) && $user->role_id == $rid ? ' selected' : '' }}>{{ ucfirst($name) }}</option>
           @endforeach
@@ -85,5 +85,5 @@
   </div>
 </div>
 
-<a href="{{ route('user.index') }}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Annuler</a>
+<a href="{{ isset($hasPermission) && $hasPermission ? route('user.index') : route('dashboard') }}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Annuler</a>
 {{ Form::submit('Enregistrer', ['class' => 'btn btn-primary']) }}

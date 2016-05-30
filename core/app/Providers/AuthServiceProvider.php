@@ -45,15 +45,9 @@ class AuthServiceProvider extends ServiceProvider
         // Vérification de la présence de la table 'permissions'
         $conn = \Config::get('database.default');
         $db = \Config::get('database.connections.' . $conn . '.database');
+        $db = $conn == 'pgsql' ? 'public' : $db;
 
-        if ($conn == 'pgsql')
-        {
-            $check = DB::select("SELECT COUNT(*) AS exist FROM information_schema.tables WHERE table_name = 'permissions' AND table_schema = 'public'");
-        }
-        else
-        {
-            $check = DB::select("SELECT COUNT(*) AS exist FROM information_schema.tables WHERE table_name = 'permissions' AND table_schema = '" . $db . "'");
-        }
+        $check = DB::select("SELECT COUNT(*) AS exist FROM information_schema.tables WHERE table_name = 'permissions' AND table_schema = '" . $db . "'");
 
         if ( $check[0]->exist == TRUE )
         {
