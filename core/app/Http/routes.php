@@ -12,14 +12,14 @@
 */
 
 // Routes non-authentifiées
-Route::get('/home', 'HomeController@index');
+Route::get('/dashboard', 'HomeController@index');
 Route::get('/', 'HomeController@welcome');
 
 Route::auth();
 
 // Routes avec authentification
 Route::group(['middleware' => 'auth'], function () {
-  
+
     // Services
     Route::resource('service', 'ServiceController');
     Route::get('service/{service}/restore', 'ServiceController@restore')->where(['service' => '[a-z-\-0-9]+']);

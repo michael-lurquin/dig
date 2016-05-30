@@ -16,7 +16,7 @@
     {{ Html::style('css/bootstrap.min.css') }}
     {{ Html::style('css/bootstrap-select.min.css') }}
     {{ Html::style('css/font-awesome.min.css') }}
-    @if (Request::is('home'))
+    @if (Request::is('dashboard'))
       {{ Html::style('css/sb-admin-2.css') }}
     @endif
     {{ Html::style('css/app.css') }}
